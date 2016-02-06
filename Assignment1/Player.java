@@ -58,16 +58,23 @@ public class Player {
 //				alpha = p.alpha;
 //			}
 			
-			if((level % 2 == 0) || beta > p.beta){
+			if(((level % 2 == 0) && level != 0) || beta > p.beta){
+				//alpha = beta;
+				if(alpha < beta && beta < 1000f)
+					alpha = beta;
 				beta = p.beta;
 			}
 			
-			if(level % 2 != 0  || alpha < p.alpha){
+			if((level % 2 != 0 && level != 0)  || alpha < p.alpha){
+				//beta = alpha;
+				if(beta > alpha && alpha > 1000f)
+					beta = alpha;
 				alpha = p.alpha;
 			}
 			if(maxAlpha < p.alpha){
 				maxAlpha = p.alpha;
 			}
+			
 			if(pStack.empty() && direction == false){
 				direction = true;
 				leftAlpha = maxAlpha;
@@ -75,6 +82,8 @@ public class Player {
 			} else if (pStack.empty() && direction == true){
 				rightAlpha = maxAlpha;
 			}
+			
+			
 			
 			/***** check if at the "bottom"  *****/
 			if(level == depth){
@@ -92,7 +101,7 @@ public class Player {
 				
 			} 
 				
-			//if not yet check left
+			//if not yet, check left
 			if(move.get(move.size() - 1)){
 				//Push current beta & alpha
 				move.set(move.size() - 1, false);

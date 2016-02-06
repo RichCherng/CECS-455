@@ -15,7 +15,7 @@ public class Main {
 		
 		
 		ArrayList<Boolean> move = new ArrayList<Boolean>();
-		System.out.println(player.looks(5, move));
+		System.out.println(player.looks(18, move));
 		long after=System.currentTimeMillis();
 		System.out.println("The time: "+(after-before));
 		
