@@ -58,11 +58,11 @@ public class Player {
 //				alpha = p.alpha;
 //			}
 			
-			if( beta > p.beta){
+			if((level % 2 == 0) || beta > p.beta){
 				beta = p.beta;
 			}
 			
-			if(alpha < p.alpha){
+			if(level % 2 != 0  || alpha < p.alpha){
 				alpha = p.alpha;
 			}
 			if(maxAlpha < p.alpha){
@@ -79,6 +79,7 @@ public class Player {
 			/***** check if at the "bottom"  *****/
 			if(level == depth){
 				float value = gameTree.value(move);
+				System.out.println(value);
 				if(level % 2 == 0){ //Minimizer's turn
 					if(beta > value){
 						beta = value;
@@ -113,7 +114,9 @@ public class Player {
 			
 		}
 
-		
+
+		System.out.println("LeftAlpha = " + leftAlpha);
+		System.out.println("RightAlpha = " + rightAlpha);
 		return leftAlpha > rightAlpha? true:false;
 	}
 	
