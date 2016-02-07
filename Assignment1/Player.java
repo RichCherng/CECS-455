@@ -18,16 +18,14 @@ public class Player {
 	
 	
 	public boolean play(ArrayList<Boolean> move, boolean maxNode){
-		long before=System.currentTimeMillis();
-		
-		long after=System.currentTimeMillis();
-		
-		System.out.println("The time: "+(after-before));
-		return true;
+
+		return looks(7, move);
 	}
 	
-	public boolean looks(int depth, ArrayList<Boolean> move){
+	
+	public boolean looks(int depth, ArrayList<Boolean> moves){
 		
+		ArrayList<Boolean> move = new ArrayList<Boolean>(moves);
 		if(move.size() + depth > MAXMOVES){
 			depth = 40 - move.size();
 		}
@@ -156,8 +154,8 @@ public class Player {
 		}
 		
 		
-		System.out.println("LeftAlpha = " + leftAlpha);
-		System.out.println("RightAlpha = " + rightAlpha);
+//		System.out.println("LeftAlpha = " + leftAlpha);
+//		System.out.println("RightAlpha = " + rightAlpha);
 		if(rightAlpha == 0 && leftAlpha < 0){
 			return true;
 		}

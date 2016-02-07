@@ -4,10 +4,10 @@ import java.util.ArrayList;
 public class Main {
 
 
-	public static void main(String[] args){
+	public static void main1(String[] args){
 		final long randomSeed = 2806598097L;
 		
-		long before=System.currentTimeMillis();
+		
 		Tree t = new Tree(randomSeed);
 		
 		Player player = new Player(t);
@@ -15,13 +15,19 @@ public class Main {
 		
 		
 		ArrayList<Boolean> move = new ArrayList<Boolean>();
-		System.out.println(player.looks(18, move));
+		for(int i = 0; i < 20; i++){
+			move.add(true);
+		}
+		System.out.println("move size: " + move.size());
+		long before=System.currentTimeMillis();
+		System.out.println(player.looks(5, move));
 		long after=System.currentTimeMillis();
 		System.out.println("The time: "+(after-before));
+		System.out.println(move.size());
 		
 	}
 	
-	public static void main2(String[] args) {
+	public static void main(String[] args) {
 		final long randomSeed=0L;
 		
 		Tree t=new Tree(randomSeed);
@@ -49,5 +55,6 @@ public class Main {
 		System.out.println("Final score: "+t.value(moves));
 		
 	}
+	
 
 }
