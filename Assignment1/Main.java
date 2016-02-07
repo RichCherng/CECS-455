@@ -34,7 +34,7 @@ public class Main {
 		ArrayList<Boolean> moves=new ArrayList<Boolean>();
 		
 		Player player=new Player(t);
-		Player other=new Player(t);
+		Player other=new Other(t);
 		int turn=0;
 		for (int i=0; i<t.height; i++) {
 			long before=System.currentTimeMillis();
@@ -43,6 +43,7 @@ public class Main {
 			if (newMove==null) 
 				throw new RuntimeException("No decision made.");
 			moves.add(newMove);
+			System.out.println(moves.size());
 			long after=System.currentTimeMillis();
 			if ((after-before)>30000) {
 				if (maxNode) System.out.println("The maximizer took too long: "+(after-before));

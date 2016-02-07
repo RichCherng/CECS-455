@@ -19,16 +19,18 @@ public class Player {
 	
 	public boolean play(ArrayList<Boolean> move, boolean maxNode){
 
-		return looks(7, move);
+		return looks(6, move);
 	}
 	
 	
-	public boolean looks(int depth, ArrayList<Boolean> moves){
+	public boolean looks(int d, ArrayList<Boolean> moves){
 		
+		int depth = d;
 		ArrayList<Boolean> move = new ArrayList<Boolean>(moves);
 		if(move.size() + depth > MAXMOVES){
-			depth = 40 - move.size();
+			depth = 40 - move.size() - 1;
 		}
+		//System.out.println("Depth: " + depth);
 		
 		Stack<Pruning> pStack = new Stack<Pruning>();
 		
