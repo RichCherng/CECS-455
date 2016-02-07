@@ -48,10 +48,10 @@ public class Player {
 			int level = pStack.size();
 			
 			Pruning p = pStack.pop();
-//			System.out.println("Node Alpha: " +p.alpha);
-//			System.out.println("Node Beta: " + p.beta);
-//			System.out.println("Node Value: " + p.value);
-//			System.out.println();
+			System.out.println("Node Alpha: " +p.alpha);
+			System.out.println("Node Beta: " + p.beta);
+			System.out.println("Node Value: " + p.value);
+			System.out.println();
 			
 			if(pStack.empty()){
 //				System.out.println("Root Alpha: " +p.alpha);
@@ -105,7 +105,7 @@ public class Player {
 				
 				
 				//check left if not yet and not at the bottom
-				if(move.size() == 0 || move.get(move.size() - 1) ){
+				if((move.size() == 0 || move.get(move.size() - 1)) && (p.beta > p.alpha)){
 					if(move.size() == 0){
 						move.add(true);
 					}
