@@ -35,10 +35,10 @@ public class Player {
 		Stack<Pruning> pStack = new Stack<Pruning>();
 		
 		//Each stack level will represent the node, that why there are depth+1 on the stacks
-		pStack.push(new Pruning(-1000f, 10000f, 10000f));
+		pStack.push(new Pruning(-10000f, 10000f, 10000f));
 		for(int i = 0; i <depth; i++){
 			move.add(true);
-			pStack.push(new Pruning(-1000f, 1000f, 10000f));
+			pStack.push(new Pruning(-10000f, 10000f, 10000f));
 		}
 		
 		float leftAlpha = -10000f, rightAlpha = -10000f;
@@ -48,10 +48,10 @@ public class Player {
 			int level = pStack.size();
 			
 			Pruning p = pStack.pop();
-			System.out.println("Node Alpha: " +p.alpha);
-			System.out.println("Node Beta: " + p.beta);
-			System.out.println("Node Value: " + p.value);
-			System.out.println();
+//			System.out.println("Node Alpha: " +p.alpha);
+//			System.out.println("Node Beta: " + p.beta);
+//			System.out.println("Node Value: " + p.value);
+//			System.out.println();
 			
 			if(pStack.empty()){
 //				System.out.println("Root Alpha: " +p.alpha);
@@ -73,7 +73,7 @@ public class Player {
 			//At the bottom of the tree
 			if(level == depth + 1){
 				p.value = gameTree.value(move);
-				System.out.println(p.value);
+				//System.out.println(p.value);
 				Pruning node = pStack.peek();
 				if( (level-1) % 2 == 0){ //Minimizer's turn
 					if(p.beta > p.value){
@@ -105,7 +105,7 @@ public class Player {
 				
 				
 				//check left if not yet and not at the bottom
-				if((move.size() == 0 || move.get(move.size() - 1)) && (p.beta > p.alpha)){
+				if((move.size() == 0 || move.get(move.size() - 1))){ // && (p.beta > p.alpha)
 					if(move.size() == 0){
 						move.add(true);
 					}
@@ -123,9 +123,11 @@ public class Player {
 					Pruning node = pStack.peek();
 					if( (level-1) % 2 == 0){ //Minimizer's turn
 						//Check if it's "empty"
-						if(node.beta != 1000f){
+						if(node.beta != 10000f){
 							if(node.beta > p.value){
 								node.beta = p.value;
+								node.value = p.value;
+							} else if(node.value == 10000f){
 								node.value = p.value;
 							}
 						} else {
@@ -134,9 +136,11 @@ public class Player {
 						}
 						
 					} else if ((level-1) % 2 != 0){ //Maximizer's turn
-						if( node.alpha != 1000f){
+						if( node.alpha != 10000f){
 							if(node.alpha < p.value){
 								node.alpha = p.value;
+								node.value = p.value;
+							}else if(node.value == 10000f){
 								node.value = p.value;
 							}
 						} else {
@@ -154,6 +158,9 @@ public class Player {
 		
 		System.out.println("LeftAlpha = " + leftAlpha);
 		System.out.println("RightAlpha = " + rightAlpha);
+		if(rightAlpha == 0 && leftAlpha < 0){
+			return true;
+		}
 		return leftAlpha > rightAlpha;
 	}
 	
