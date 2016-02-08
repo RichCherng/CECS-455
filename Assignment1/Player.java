@@ -1,4 +1,5 @@
 package Assignment1;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -8,7 +9,7 @@ public class Player {
 	
 	public Tree gameTree = null;
 	
-	public final int MAXMOVES = 41;
+	public final int MAXMOVES = 40;
 	
 	public Player(Tree tree){
 		
@@ -19,7 +20,7 @@ public class Player {
 	
 	public boolean play(ArrayList<Boolean> move, boolean maxNode){
 
-		return looks(6, move);
+		return looks(7, move);
 	}
 	
 	
@@ -105,7 +106,7 @@ public class Player {
 				
 				
 				//check left if not yet and not at the bottom
-				if((move.size() == 0 || move.get(move.size() - 1))){ // && (p.beta > p.alpha)
+				if((move.size() == 0 || move.get(move.size() - 1)) && (p.beta > p.alpha)){
 					if(move.size() == 0){
 						move.add(true);
 					}
@@ -174,3 +175,4 @@ public class Player {
 		}
 	}
 }
+
