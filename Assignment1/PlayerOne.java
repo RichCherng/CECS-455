@@ -1,24 +1,4 @@
 package Assignment1;
-//
-//import java.util.ArrayList;
-//import java.util.Random;
-//
-//public class Other extends Player{
-//
-//	public Other(Tree tree) {
-//		super(tree);
-//		// TODO Auto-generated constructor stub
-//	}
-//	
-//	public boolean play(ArrayList<Boolean> move, boolean maxNode){
-//
-//		Random rand = new Random();
-//		return rand.nextInt() > 0? true: false;
-//		// return false;
-//	}
-//
-//}
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -29,7 +9,7 @@ import java.util.Random;
  * @author LeafCherngchaosil
  *
  */
-public class Other {
+public class PlayerOne {
 
 	public Tree gameTree = null;
 	boolean choiceBool;
@@ -38,7 +18,7 @@ public class Other {
 	int roundCount;
 	Random aRand = new Random();
 
-	public Other(Tree tree) {
+	public PlayerOne(Tree tree) {
 		gameTree = tree;
 		roundCount = 0;
 	}
@@ -47,7 +27,7 @@ public class Other {
 		if (pMoves.size() == (currentArrSize + 6) || pMoves.size() == 40) {
 			float nodeValue = gameTree.value(pMoves);
 			pMoves.remove(pMoves.size() - 1);
-			if (nodeValue < 0)
+			if (nodeValue > 0)
 				return (float) 0.5;
 			else {
 				return 0;

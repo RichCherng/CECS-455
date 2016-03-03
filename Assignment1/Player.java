@@ -20,7 +20,11 @@ public class Player {
 	
 	public boolean play(ArrayList<Boolean> move, boolean maxNode){
 
+<<<<<<< HEAD
+		return looks(10, move);
+=======
 		return looks(7, move);
+>>>>>>> c82ffa51638434e52aaae404f9ac32ec5c4c52cf
 	}
 	
 	
@@ -33,136 +37,121 @@ public class Player {
 		}
 		//System.out.println("Depth: " + depth);
 		
-		Stack<Pruning> pStack = new Stack<Pruning>();
-		
-		//Each stack level will represent the node, that why there are depth+1 on the stacks
-		pStack.push(new Pruning(-10000f, 10000f, 10000f));
-		for(int i = 0; i <depth; i++){
+		Stack<Integer> pStack = new Stack<Integer>();
+		//Root
+		pStack.push(0);
+		for(int i = 0; i < depth; i++){
+			pStack.push(0);
 			move.add(true);
-			pStack.push(new Pruning(-10000f, 10000f, 10000f));
 		}
 		
-		float leftAlpha = -10000f, rightAlpha = -10000f;
-		boolean left = true;
-		while(!pStack.isEmpty()){
+		while(!(pStack.isEmpty())){
 			
 			int level = pStack.size();
 			
-			Pruning p = pStack.pop();
-//			System.out.println("Node Alpha: " +p.alpha);
-//			System.out.println("Node Beta: " + p.beta);
-//			System.out.println("Node Value: " + p.value);
-//			System.out.println();
+			int n = pStack.pop();
 			
-			if(pStack.empty()){
-//				System.out.println("Root Alpha: " +p.alpha);
-//				System.out.println("Root Beta: " + p.beta);
-				if(left){
-					left = false;
-					leftAlpha = p.alpha;
-				} else {
-					if(p.alpha == leftAlpha){
-						rightAlpha = 0;
-					} else {
-						rightAlpha = p.alpha;
-					}
-				}
-			}
-			//beta = p.beta;
-			//alpha = p.alpha;
-			
-			//At the bottom of the tree
+			//"Bottom Level"
 			if(level == depth + 1){
-				p.value = gameTree.value(move);
-				//System.out.println(p.value);
-				Pruning node = pStack.peek();
-				if( (level-1) % 2 == 0){ //Minimizer's turn
-					if(p.beta > p.value){
-						//beta = value;
-						node.beta = p.value;
-						//node.value = p.value;
-					}
-					if(node.value == 10000f){
-						node.value = p.value;
-					} else if(node.value > p.value && node.value != 10000f){
-						node.value = p.value;
+				
+				float value = gameTree.value(move);
+				//System.out.println(value);
+				int parent = pStack.pop();
+				if(parent == 0){
+					pStack.push( value < 0? -1:1);
+				} else if( (level - 1) % 2 == 0){ //Minimizer's turn
+					if(parent > 0){
+						pStack.push(value < 0? -1: parent);
 					}
 					
-				} else if ((level-1) % 2 != 0){ //Maximizer's turn
-					if(p.alpha < p.value){
-						//alpha = value;
-						node.alpha = p.value;
-						//node.value = p.value;
+				} else if( (level - 1) % 2 != 0){ //Maximizer's turn
+					if(parent < 0){
+						pStack.push(value > 0? 1: parent);
 					}
-					if(node.value == 10000f){
-						node.value = p.value;
-					} else if(node.value < p.value && node.value != 10000f){
-						node.value = p.value;
-					}
-					
 				}
-
-			} else {
 				
+			} else { 
+				//If satisfy the maximizer/minimizer
+				int parent;
+				if(!pStack.empty()){ //not yet at root
+					 parent = pStack.pop();
+				} else if(n > 0){
+					return true;
+				} else {
+					return false;
+				}
 				
+<<<<<<< HEAD
+				if( (level - 1) % 2 != 0){ //Minimizer's node
+					if (n < 0){ //Minimizer got what it wanted
+						move.remove(move.size() - 1);
+						if(parent == 0){
+							pStack.push(-1);
+						}
+						else {
+							pStack.push(parent);
+						}
+//
+						continue;
+					} else if(!(move.get(move.size() - 1))){
+						move.remove(move.size() -1);
+						if(parent < n){ //Max is parent, push positive if n is positive
+							pStack.push(n);
+						} else {
+							pStack.push(parent);
+						} 
+						continue;
+					}
+				
+				} else if( (level - 1) % 2 == 0){ //Maximizer's node
+					if(n > 0){ //Maximizer got what it wanted
+						move.remove(move.size() - 1);
+						if(parent == 0){
+							pStack.push(1);
+						} 
+						else {
+							pStack.push(parent);
+						}
+						continue;
+					} else if(!(move.get(move.size() - 1))){ //if left is already check
+						move.remove(move.size() - 1);
+						if(parent > n){ //Min is parent, push negative if n is negative
+							pStack.push(n);
+						} else {
+							pStack.push(parent);
+						}
+						continue;
+					} 
+				}
+				pStack.push(parent);
+				
+				if((move.size() == 0 || move.get(move.size() - 1))){
+					
+=======
 				//check left if not yet and not at the bottom
 				if((move.size() == 0 || move.get(move.size() - 1)) && (p.beta > p.alpha)){
+>>>>>>> c82ffa51638434e52aaae404f9ac32ec5c4c52cf
 					if(move.size() == 0){
 						move.add(true);
 					}
+					
 					move.set(move.size() - 1, false);
-					pStack.add(p); //push the current node back to the stack
-					pStack.add(new Pruning(p.alpha, p.beta, 10000f));
+					pStack.add(n); //push the current node back to the stack
+					pStack.add(0);
 					for(int i = level; i < depth; i++){
-						pStack.add(new Pruning(p.alpha, p.beta, 10000f));
+						pStack.add(0);
 						move.add(true);
 					}
-				} else { //Moving up
-					if(pStack.empty()) // At the root
-						continue;
-					move.remove(move.size() - 1);
-					Pruning node = pStack.peek();
-					if( (level-1) % 2 == 0){ //Minimizer's turn
-						//Check if it's "empty"
-						if(node.beta != 10000f){
-							if(node.beta > p.value){
-								node.beta = p.value;
-								node.value = p.value;
-							} else if(node.value == 10000f){
-								node.value = p.value;
-							}
-						} else {
-							node.beta = p.value;
-							node.value = node.beta;
-						}
-						
-					} else if ((level-1) % 2 != 0){ //Maximizer's turn
-						if( node.alpha != 10000f){
-							if(node.alpha < p.value){
-								node.alpha = p.value;
-								node.value = p.value;
-							}else if(node.value == 10000f){
-								node.value = p.value;
-							}
-						} else {
-							node.alpha = p.value;
-							node.value = node.alpha;
-						}
-					}
+					
 				}
+				
+				
+			
+				
 			}
-			
-			
-			
 		}
 		
-		
-//		System.out.println("LeftAlpha = " + leftAlpha);
-//		System.out.println("RightAlpha = " + rightAlpha);
-		if(rightAlpha == 0 && leftAlpha < 0){
-			return true;
-		}
-		return leftAlpha > rightAlpha;
+		return true;
 	}
 	
 	class Pruning{

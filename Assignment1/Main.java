@@ -5,7 +5,8 @@ public class Main {
 
 
 	public static void main1(String[] args){
-		final long randomSeed = 2806598097L;
+		final long randomSeed = 3206658097L;
+		//2806598097L
 		
 		
 		Tree t = new Tree(randomSeed);
@@ -15,9 +16,9 @@ public class Main {
 		
 		
 		ArrayList<Boolean> move = new ArrayList<Boolean>();
-		for(int i = 0; i < 20; i++){
-			move.add(true);
-		}
+//		for(int i = 0; i < 20; i++){
+//			move.add(true);
+//		}
 		System.out.println("move size: " + move.size());
 		long before=System.currentTimeMillis();
 		System.out.println(player.looks(5, move));
@@ -34,7 +35,7 @@ public class Main {
 		ArrayList<Boolean> moves=new ArrayList<Boolean>();
 		
 		Player player=new Player(t);
-		Player other=new Other(t);
+		Other other=new Other(t);
 		int turn=0;
 		for (int i=0; i<t.height; i++) {
 			long before=System.currentTimeMillis();
