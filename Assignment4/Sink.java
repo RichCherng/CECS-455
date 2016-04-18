@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Queue;
 import java.util.Random;
@@ -31,7 +32,7 @@ public class Sink {
 
 	public void findCircle(){
 		Random  rand = new Random();
-		HashSet<String> hashMove = new HashSet<String>();
+		HashMap<String, Node> hashMove = new HashMap<String, Node>();
 		ArrayList<Integer> move = new ArrayList<Integer>();
 		Queue<Node> queue = new ArrayDeque<Node>();
 
@@ -40,33 +41,23 @@ public class Sink {
 		}
 
 		Node root = new Node(move, null);
-		hashMove.add(root.hash);
+		hashMove.put(root.hash, root);
 		queue.add(root);
 		int count = 1;
 		while(!queue.isEmpty()){
 			Node node = queue.remove();
 			node.findNextMoves(u);
-			for(Node n: node.child){
-
-				if(hashMove.contains(n.hash)){ //Check for Cycle
-//					System.out.println(n.hash);
-					Node cycleHead = n;
-					Node parent = node.parent;
+			for(ArrayList<Integer> n: node.child){
+				String hash = getHash(n);
+				if(hashMove.containsKey(hash)){ //Check for Cycle
+					hashMove.get(hash).parents.add(node);
 					Stack<Node> stack = new Stack<Node>();
-					stack.add(node);
-					stack.add(parent);
-					while(  parent != null && !parent.hash.equals(cycleHead.hash)){
-						parent = parent.parent;
-						stack.add(parent);
+//					System.out.println(node.hash);
+//					System.out.println(hashMove.get(hash).hash);
 
-					}
+					node.findNode(hashMove.get(hash), stack);
 
-					if (parent == null){
-//						System.out.println("Hit Root " + count);
-						continue;
-					}
-
-					if( parent.hash.equals(cycleHead.hash)){
+					if(!stack.isEmpty()){
 						ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
 						while(!stack.isEmpty()){
 							result.add(stack.pop().move);
@@ -77,12 +68,10 @@ public class Sink {
 					}
 
 
-
-
-
 				} else {
-					hashMove.add(n.hash);
-					queue.add(n);
+					Node newNode = new Node(n, node);
+					hashMove.put(hash, newNode);
+					queue.add(hashMove.get(hash));
 					count++;
 
 
@@ -99,12 +88,21 @@ public class Sink {
 		}
 	}
 
+	public String getHash(ArrayList<Integer> moves){
+		String hash = "";
+		for(Integer m: moves){
+			hash += m  +"-";
+		}
+		return hash;
+	}
+
 	public void printFile(String fileName, ArrayList<ArrayList<Integer>> result){
 		try{
 			PrintWriter out = new PrintWriter(fileName);
 			for(ArrayList<Integer> arr: result){
-				out.printf("[%d, %d, %d, %d, %d, %d, %d, %d, %d, %d]%n", arr.get(0), arr.get(1), arr.get(2),
-						arr.get(3), arr.get(4), arr.get(5),arr.get(6),arr.get(7),arr.get(8),arr.get(9));
+				out.printf("[%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d]%n", arr.get(0), arr.get(1), arr.get(2),
+						arr.get(3), arr.get(4), arr.get(5),arr.get(6),arr.get(7),arr.get(8),arr.get(9),arr.get(10),arr.get(11),arr.get(12),arr.get(13),arr.get(14)
+						,arr.get(15),arr.get(16),arr.get(17),arr.get(18),arr.get(19));
 			}
 
 			out.close();
@@ -122,21 +120,41 @@ public class Sink {
 
 	class Node{
 
-		ArrayList<Node> child;
+		ArrayList<ArrayList<Integer>> child;
 		HashSet<String> hashChild;
 		ArrayList<Integer> move;
 		String hash;
-		Node parent;
+//		Node parent;
+		ArrayList<Node> parents = new ArrayList<Node>();
 		public Node(ArrayList<Integer> m, Node p){
 
-			parent = p;
+			parents.add(p);
 			move = m;
-			child = new ArrayList<Node>();
+			child = new ArrayList<ArrayList<Integer>>();
 			hashChild = new HashSet<String>();
 			hash = getHash(move);
 
 		}
 
+		public Stack<Node> findNode(Node n, Stack<Node> stack){
+
+			if(this == n){
+				stack.push(this);
+				return stack;
+			}
+
+			for(Node p : parents){
+				if(p == null){
+					continue;
+				}
+				if(p.findNode(n, stack) != null){
+					stack.push(this);
+					return stack;
+				}
+			}
+
+			return null;
+		}
 		public void findNextMoves(Utility u){
 			int count = 0;
 			int NUMPLAYER = u.getNumPlayers();
@@ -146,8 +164,8 @@ public class Sink {
 				ArrayList<Integer> nextMove = getNextMove(player, move, u);
 //				printArrayList(nextMove);
 				String hash = getHash(nextMove);
-				if(!hashChild.contains(hash)){
-					child.add(new Node(nextMove,this));
+				if(!hashChild.contains(hash) && !hash.equals(this.hash)){
+					child.add(nextMove);
 					hashChild.add(hash);
 				}
 
@@ -179,6 +197,7 @@ public class Sink {
 			}
 			return hash;
 		}
+
 
 
 
