@@ -18,21 +18,21 @@ public class Utility {
 		public ArrayList<Double> magnitudes;
 		public ArrayList<Boolean> sinOrCos; }
 	private Individual[] players;
-	
+
 	public Utility() {
 		Random r=new Random();
 		numPlayers=20;
 		numMoves=100;
 		numCurves=10;
 		players=new Individual[numPlayers];
-		
+
 		for (int p=0; p<numPlayers; p++) {
 			players[p]=new Individual();
 			players[p].periods=new ArrayList<ArrayList<Double>>();
 			players[p].offsets=new ArrayList<Double>();
 			players[p].magnitudes=new ArrayList<Double>();
 			players[p].sinOrCos=new ArrayList<Boolean>();
-			
+
 			for (int i=0; i<numCurves; i++) {
 				ArrayList<Double> currentPeriod=new ArrayList<Double>();
 				for (int j=0; j<numPlayers; j++)
@@ -44,14 +44,14 @@ public class Utility {
 			}
 		}
 	}
-	
+
 	public int getNumPlayers() { return numPlayers; }
 	public int getNumMoves() { return numMoves; }
-	
+
 	public void exportUtility() throws IOException {
 		FileWriter fw=new FileWriter("utility.txt");
 		BufferedWriter bw=new BufferedWriter(fw);
-		
+
 		bw.write(""+numPlayers+"\n");
 		bw.write(""+numMoves+"\n");
 		bw.write(""+numCurves+"\n");
@@ -67,11 +67,11 @@ public class Utility {
 		bw.close();
 		fw.close();
 	}
-	
+
 	public void importUtility() throws IOException {
 		FileReader fr=new FileReader("utility.txt");
 		BufferedReader br=new BufferedReader(fr);
-		
+
 		String line=br.readLine();
 		numPlayers=Integer.parseInt(line);
 		line=br.readLine();
@@ -80,14 +80,14 @@ public class Utility {
 		numCurves=Integer.parseInt(line);
 
 		players=new Individual[numPlayers];
-		
+
 		for (int p=0; p<numPlayers; p++) {
 			players[p]=new Individual();
 			players[p].periods=new ArrayList<ArrayList<Double>>();
 			players[p].offsets=new ArrayList<Double>();
 			players[p].magnitudes=new ArrayList<Double>();
 			players[p].sinOrCos=new ArrayList<Boolean>();
-			
+
 			for (int i=0; i<numCurves; i++) {
 				ArrayList<Double> currentPeriod=new ArrayList<Double>();
 				for (int j=0; j<numPlayers; j++) {
@@ -107,11 +107,11 @@ public class Utility {
 				else players[p].sinOrCos.add(false);
 			}
 		}
-		
+
 		br.close();
 		fr.close();
 	}
-	
+
 	public ArrayList<Integer> evaluate(ArrayList<Integer> moves) {
 		for (int i=0; i<moves.size(); i++)
 			if ((moves.get(i).intValue()>=numMoves)||(moves.get(i).intValue()<0))
