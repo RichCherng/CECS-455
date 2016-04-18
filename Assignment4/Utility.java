@@ -22,7 +22,7 @@ public class Utility {
 	public Utility() {
 		Random r=new Random();
 		numPlayers=20;
-		numMoves=100;
+		numMoves=5;
 		numCurves=10;
 		players=new Individual[numPlayers];
 

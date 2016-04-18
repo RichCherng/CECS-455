@@ -4,12 +4,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class Main {
 
 
-	public static void main(String[] args){
+	public static void notmain(String[] args){
 
 		Utility u;
 
@@ -27,9 +28,27 @@ public class Main {
 		}
 
 
+		System.out.println("Looking for Cycle...");
+		findCycle(u);
+//		for(int i = 0; i < 10000; i++){
+//			if (findCycle(u)){
+//				System.out.println("Found Cycle");
+//				break;
+//			} else {
+//				System.out.println("Limit Reached: " + i);
+//			}
+//		}
 
+
+	}
+
+	public static void findCycle(Utility u){
+
+		Random rand = new Random();
 		ArrayList<Integer> moves;
 		ArrayList<ArrayList<Integer>> cycle;
+		HashMap<String, ArrayList<Integer>> cycle_hash = new HashMap<String, ArrayList<Integer>>();
+
 		ArrayList<ArrayList<Integer>> resultCycle;
 		int NUMPLAYERS = u.getNumPlayers();
 		/******* Start Cycle  Setup******/
@@ -52,15 +71,23 @@ public class Main {
 					moves = getNextMove(player, moves, u);
 
 					//If current is already maxed, move on to the next player
-					int check = checkListExist(cycle, moves);
-					if(check == -1){
+					String hash = getHash(moves);
+					if(!cycle_hash.containsKey(hash)){
 						cycle.add(moves);
+						cycle_hash.put(hash, moves);
+						int num = cycle.size();
+
+						if(num % 2000 == 0) {
+							System.out.println(cycle.size());
+						}
 
 					} else {
+						int check = checkListExist(cycle, moves);
 //						System.out.println(checkUnique(cycle));
 						/** Check if any other place want to move **/
 //						printCycle(cycle);
-						System.out.println(cycle.size());
+
+//						System.out.println(cycle.size());
 //						System.out.println(check + " : " + cycle.size());
 						if (check == cycle.size() - 1){ //This player doesn't want to move
 							continue;
@@ -73,6 +100,8 @@ public class Main {
 								resultCycle.add(cycle.get(index));
 							}
 
+							System.out.println(resultCycle.size());
+							printFile("result.txt", resultCycle);
 							break whileLoop; //Cycle created
 						}
 
@@ -81,74 +110,15 @@ public class Main {
 				}
 			}
 
-//		printCycle(cycle);
-		System.out.println(resultCycle.size());
-		printFile("result.txt", resultCycle);
-
-
 	}
 
-	public static boolean findCycle(Utility u){
-
-		Random rand = new Random();
-		ArrayList<Integer> moves;
-		ArrayList<ArrayList<Integer>> cycle;
-		ArrayList<ArrayList<Integer>> resultCycle;
-		int NUMPLAYERS = u.getNumPlayers();
-		/******* Start Cycle  Setup******/
-
-		moves = new ArrayList<Integer>(); //Instantiate first moves
-		cycle = new ArrayList<ArrayList<Integer>>();
-
-		//Random move
-		for(int i = 0; i < 20; i++){
-			moves.add(rand.nextInt(100));
+	public static String getHash(ArrayList<Integer> moves){
+		String hash = "";
+		for(Integer m: moves){
+			hash += m+"-";
 		}
 
-		// Find max of one player first, that will be the first move in the cycle
-
-		whileLoop:
-			while(true){
-				for( int player = 0; player < NUMPLAYERS; player++){
-					moves = new ArrayList<Integer>(moves);
-
-					moves = getNextMove(player, moves, u);
-
-					//If current is already maxed, move on to the next player
-					int check = checkListExist(cycle, moves);
-					if(check == -1){
-						cycle.add(moves);
-
-					} else {
-//						System.out.println(checkUnique(cycle));
-						/** Check if any other place want to move **/
-//						printCycle(cycle);
-						System.out.println(cycle.size());
-//						System.out.println(check + " : " + cycle.size());
-						if (check == cycle.size() - 1){ //This player doesn't want to move
-							continue;
-						} else {
-							/**
-							 * Get Index of that moves, cut anything else before that moves
-							 */
-							resultCycle = new ArrayList<ArrayList<Integer>>();
-							for(int index = check; index < cycle.size(); index++){
-								resultCycle.add(cycle.get(index));
-							}
-
-							printFile("result.txt", resultCycle);
-							return true; //Cycle created
-						}
-
-					}
-
-				}
-				if(cycle.size() > 5000){
-					break;
-				}
-			}
-
-		return false;
+		return hash;
 	}
 
 	public static ArrayList<Integer> getNextMove(int player, ArrayList<Integer> moves, Utility u){
@@ -169,7 +139,6 @@ public class Main {
 		result.set(player, maxMove);
 
 		return result;
-
 
 	}
 
